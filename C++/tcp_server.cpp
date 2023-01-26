@@ -5,7 +5,8 @@
  * $ g++ -Wall -Wextra [std=c++11] tcp_server.cpp -o tcp_server
  * $ ./tcp_server
  * 
- * Copyright (c) 2023 Carmelo Ballone <carmelo.ballone@outlook.com>
+ * Author: Carmelo Ballone <carmelo.ballone@outlook.com>
+ * Date: 01/2023
 */
 
 #include <iostream>
@@ -33,7 +34,7 @@ int main() {
             throw -1;
         }
     } catch(int e){
-        perror("[-] An error in socket fd creation occurred.\n");
+        cerr << "[-] An error in socket fd creation occurred.\n";
         cerr << "Exit status: " << e << '\n';
         return -1;
     } 
@@ -53,7 +54,7 @@ int main() {
             cerr << "[x] Error while closing socket fd.\n";
         cerr << "[-] An error in server socket binding occurred.\n";
         cerr << "Exit status: " << e << '\n';
-        exit(e);
+        return e;
     } 
 
     // server listening for connections
@@ -65,7 +66,7 @@ int main() {
             cerr << "[x] Error while closing server socket fd.\n";
         cerr << "[-] An error while listening for new connections occurred.\n";
         cerr << "Exit status: " << e << '\n';
-        exit(e);
+        return e;
     }
 
     cout << "[*] Listening on " << IP << ':' << PORT << '\n';
@@ -126,8 +127,9 @@ int main() {
 
 }
 
-void* client_handler(void *client_sock) {
-    char reply[] = "ACK", recv_buf[1024];
+void* client_handler(void* client_sock) {
+    const char reply[] = "ACK";
+    char recv_buf[1024];
     int client_socket = *(int*)client_sock;
     try {
         // receive data from client
@@ -146,7 +148,7 @@ void* client_handler(void *client_sock) {
             throw -4;
             
     } catch(int e) {
-        cerr << "[x] An error in client handling occurred.\n";
+        cerr << "[x] An error in client_handler function occurred.\n";
         cerr << "Error code: " << e << '\n';
         // re-throw the exception to the caller
         throw;
