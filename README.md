@@ -1,2 +1,2 @@
 # net-dev
-Thid repository contains network programming stuff and more.
+This repository contains network programming stuff and more.
