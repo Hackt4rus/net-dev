@@ -142,17 +142,19 @@ void* client_handler(void* client_sock) {
         // send response to client
         if (send(client_socket, reply, 1024, 0) < 0)
             throw -3;
-
-        // close the client socket file descriptor
-        if (close(client_socket) < 0)
-            throw -4;
             
     } catch(int e) {
+        if (close(client_socket) < 0)
+            cerr << "[x] Error while closing client socket.\n";
         cerr << "[x] An error in client_handler function occurred.\n";
         cerr << "Error code: " << e << '\n';
         // re-throw the exception to the caller
         throw;
     }
+    
+    // close the client socket file descriptor
+    if (close(client_socket) < 0)
+        cerr << "[x] Error while closing client socket.\n";
 
     pthread_exit(0);
 
